@@ -1,9 +1,9 @@
 # 🎭 Comparative Study: Deepfake Detection using Sequential Architectures
 
 [![Research Category: Riset](https://img.shields.io/badge/Category-Riset-blue.svg)](#)
-[![Dataset: Celeb--DF_v2](https://img.shields.io/badge/Dataset-Celeb--DF_v2-green.svg)](#)
+[![Dataset: Celeb--DF_v2](https://img.shields.io/badge/Dataset-Celeb--DF_v2-green.svg)](https://www.kaggle.com/datasets/reubensuju/celeb-df-v2/)
 
-This repository contains a comprehensive research on Deepfake detection. We compare three different Deep Learning architectures to evaluate their effectiveness in capturing facial temporal anomalies.
+This repository contains comprehensive research on Deepfake detection. We compare three different Deep Learning architectures to evaluate their effectiveness in capturing facial temporal anomalies using the Celeb-DF v2 dataset.
 
 ## 👥 Authors (Team Chronos)
 * **Faisal Nur Qolbi** - its.salll@upi.edu
@@ -14,19 +14,19 @@ This repository contains a comprehensive research on Deepfake detection. We comp
 
 ## 📂 Research Notebooks
 
-We conducted our experiments across three distinct architectures. Each notebook contains the full pipeline from feature loading to advanced evaluation.
+Each notebook contains the full pipeline: Feature Loading → Model Training → Optimal Threshold Finding → Advanced Evaluation.
 
 ### 1. Baseline Model (DNN)
-The simplest approach using Fully Connected Layers. Used as a performance benchmark for more complex models.
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](LINK_COLAB_DNN_ANDA)
+The simplest approach using Fully Connected Layers to process averaged frame features.
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1WJKhVMJg9HtR80gNaQF3FStKiWFxE3HG?usp=sharing)
 
 ### 2. Recurrent Model (BiLSTM)
-A sequence-aware model that processes frames in both forward and backward directions to capture long-term dependencies.
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](LINK_COLAB_BILSTM_ANDA)
+A bidirectional sequence-aware model designed to capture long-term temporal dependencies in facial movements.
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/169VFECZgXPJ45t0oViY6CWwnPBayJwW7?usp=sharing)
 
 ### 3. Attention Model (Transformer Encoder)
-Our primary research focus. It uses **Self-Attention** mechanisms to analyze all video frames simultaneously, providing the highest detection accuracy.
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](LINK_COLAB_TRANSFORMER_ANDA)
+Utilizes **Self-Attention** mechanisms to analyze all video frames simultaneously, focusing on the most suspicious temporal artifacts.
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1QwuUlVUDLSbK-GJEYuQJBPICVXI8VdJN?usp=sharing)
 
 ---
 
@@ -36,27 +36,31 @@ Our research follows a standardized pipeline across all models to ensure a fair 
 
 
 
-1.  **Face Cropping:** Using **MTCNN** to isolate facial regions and remove background noise.
-2.  **Feature Embedding:** Extracting 1280-dimensional vectors per frame using **EfficientNet-B0**.
-3.  **Sequential Processing:** Feeding the frame sequences into DNN, BiLSTM, or Transformer.
-4.  **Inference:** Live testing using YouTube URLs and "In-the-wild" videos.
+1. **Face Cropping:** Utilizing **MTCNN** to isolate facial regions and eliminate background noise.
+2. **Feature Embedding:** Extracting 1280-dimensional vectors per frame using **EfficientNet-B0**.
+3. **Sequential Processing:** Feeding the 16-frame sequences into DNN, BiLSTM, or Transformer.
+4. **Inference:** Live testing using YouTube URLs and "In-the-wild" video analysis.
 
 ---
 
-## 📊 Evaluation Results
+## 📊 Evaluation Results (Final Experiment)
 
-| Model Architecture | Best AUC | Optimal Threshold | Accuracy |
-| :--- | :---: | :---: | :---: |
-| **DNN (Baseline)** | 0.8624 | 0.50 | 85.2% |
-| **BiLSTM** | 0.9502 | 0.65 | **96.0%** |
-| **Transformer** | **0.9565** | **0.13** | 94.6% |
+Based on our final research run, here is the performance comparison:
+
+| Model Architecture | Best AUC | Optimal Threshold | Accuracy | F1-Score (Fake) |
+| :--- | :---: | :---: | :---: | :---: |
+| **DNN (Baseline)** | 0.9407 | 0.50 | 94.0% | 0.96 |
+| **BiLSTM** | **0.9618** | **0.8811** | **96.0%** | **0.97** |
+| **Transformer** | 0.9565 | 0.13 | 94.6% | **0.97** |
 
 
 
-### Key Finding:
-The **Transformer Encoder** achieved the highest AUC (0.9565), proving that self-attention is highly effective at spotting subtle deepfake artifacts. However, we found that **BiLSTM** remains more stable when predicting "Real" videos with standard thresholds.
+### 💡 Key Findings:
+* **BiLSTM Excellence:** The **BiLSTM** model achieved the highest AUC (0.9618) and overall Accuracy (96%). It requires a high optimal threshold (**0.8811**) to maintain a balance between identifying real videos and detecting fakes.
+* **Transformer Sensitivity:** The **Transformer Encoder** is highly effective at class separation (AUC 0.9565) but operates optimally at a low threshold (**0.13**).
+* **Preprocessing Impact:** We found that bypassing standard ImageNet normalization is crucial for "in-the-wild" testing to match the training data distribution.
 
 ---
 
 ## 📜 Acknowledgments
-This research is built upon the **Celeb-DF v2** dataset and utilizes pretrained weights from **EfficientNet-B0** and **MTCNN**.
+This research is built upon the **Celeb-DF v2** dataset and utilizes pretrained weights from **EfficientNet-B0** and **MTCNN**. Special thanks to the open-source community for the tools and frameworks that made this study possible.
